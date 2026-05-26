@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#f0ede6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Adrián</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  color-scheme: light only !important;
+}
+html, body {
+  background: #f0ede6 !important;
+  color: #1a1916 !important;
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+body { padding-bottom: 48px; }
+
+/* Header */
+.header {
+  padding: 3rem 1.5rem 0.75rem;
+}
+.header-greeting {
+  font-size: 14px;
+  font-weight: 400;
+  color: #888580;
+  margin-bottom: 2px;
+}
+.header-name {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1916;
+  letter-spacing: -0.5px;
+}
+
+/* Quote */
+.quote-block {
+  padding: 0.25rem 1.5rem 1.25rem;
+  text-align: center;
+}
+.quote-text {
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  color: #4a4845;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+.quote-author {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b0ada8;
+}
+
+/* Today card */
+.today-wrap { padding: 0 1.5rem 0.75rem; }
+.today-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1rem 1.25rem;
+}
+.card-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2a7a4e;
+  margin-bottom: 0.6rem;
+}
+.today-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.3rem 0;
+}
+.time-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+.time-am { background: #d0eadb; color: #1a6b3f; }
+.time-pm { background: #e8e5de; color: #605d58; }
+.today-item { font-size: 15px; font-weight: 500; color: #1a1916; }
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  gap: 3px;
+  padding: 0.5rem 1.5rem;
+  position: sticky;
+  top: 0;
+  background: #f0ede6;
+  z-index: 100;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.tab {
+  flex: 1;
+  padding: 7px 2px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #b0ada8;
+  cursor: pointer;
+  border-radius: 99px;
+  transition: all 0.18s;
+}
+.tab.active {
+  background: #fff;
+  color: #1a1916;
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* Panes */
+.pane { display: none; padding: 1rem 1.5rem; }
+.pane.active { display: block; }
+
+/* Metric grid */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 8px;
+  margin-bottom: 0.75rem;
+}
+.metric {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+.metric-label { font-size: 11px; font-weight: 400; color: #b0ada8; margin-bottom: 4px; }
+.metric-value { font-size: 28px; font-weight: 700; color: #1a1916; letter-spacing: -0.5px; }
+.metric-value.green { color: #2a7a4e; }
+
+/* Week dots */
+.week-dots {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0,1fr));
+  gap: 5px;
+  margin-bottom: 0.75rem;
+}
+.dot {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500;
+  color: #b0ada8;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.07);
+}
+.dot.done { background: #d0eadb; color: #1a6b3f; border-color: transparent; }
+.dot.today { border: 1.5px solid #1a1916; color: #1a1916; }
+
+/* Section title */
+.sec-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888580;
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Habit block */
+.habit-block {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.habit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.15s;
+}
+.habit-row:last-child { border-bottom: none; }
+.habit-row.done { background: #f0faf4; }
+.habit-name { font-size: 15px; font-weight: 500; color: #1a1916; margin-bottom: 2px; }
+.habit-streak { font-size: 12px; font-weight: 400; color: #b0ada8; }
+.check-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid #d0cdc8;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  color: transparent;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.check-btn.checked { background: #2a7a4e; border-color: #2a7a4e; color: #fff; }
+
+/* Plan block */
+.plan-block {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.plan-row {
+  display: flex;
+  gap: 10px;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  align-items: flex-start;
+}
+.plan-row:last-child { border-bottom: none; }
+.plan-day { font-size: 12px; font-weight: 600; color: #b0ada8; min-width: 28px; padding-top: 3px; }
+.plan-day.hoy { color: #2a7a4e; }
+.plan-content { flex: 1; }
+.badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 3px; }
+.badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 99px; }
+.b-run { background: #d0eadb; color: #1a6b3f; }
+.b-lift { background: #dce8fc; color: #2a5cc8; }
+.b-hyrox { background: #fef0e0; color: #a05c0a; }
+.b-rc { background: #ebe6fc; color: #5c35b0; }
+.b-cross { background: #e8e5de; color: #605d58; }
+.b-mob { background: #e8e5de; color: #605d58; }
+.plan-note { font-size: 11px; font-weight: 400; color: #b0ada8; }
+
+/* Phase block */
+.phase-block {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.phase-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 13px;
+}
+.phase-row:last-child { border-bottom: none; }
+.phase-key { font-weight: 400; color: #888580; }
+.phase-val { font-weight: 500; color: #1a1916; }
+
+/* Rule */
+.rule-block {
+  background: #fff;
+  border-radius: 16px;
+  border-left: 3px solid #2a7a4e;
+  padding: 0.9rem 1.1rem;
+  font-size: 13px;
+  font-weight: 400;
+  color: #605d58;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* Event card */
+.event-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.event-days-box {
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  text-align: center;
+  min-width: 64px;
+}
+.event-days-num { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; }
+.event-days-label { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+.event-name { font-size: 15px; font-weight: 600; color: #1a1916; margin-bottom: 2px; }
+.event-date { font-size: 12px; font-weight: 400; color: #888580; }
+
+/* Rewards */
+.reward-block {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.reward-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.reward-row:last-child { border-bottom: none; }
+.reward-row.unlocked { background: #f0faf4; }
+.reward-num { font-size: 22px; font-weight: 700; color: #d0cdc8; min-width: 36px; letter-spacing: -0.5px; }
+.reward-row.unlocked .reward-num { color: #2a7a4e; }
+.reward-title { font-size: 14px; font-weight: 500; color: #1a1916; margin-bottom: 2px; }
+.reward-sub { font-size: 12px; font-weight: 400; color: #b0ada8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-greeting" id="hdr-greeting">Buenas tardes,</div>
+  <div class="header-name">Adrián.</div>
+</div>
+
+<div class="quote-block">
+  <div class="quote-text" id="quote-text"></div>
+  <div class="quote-author" id="quote-author"></div>
+</div>
+
+<div class="today-wrap">
+  <div class="today-card">
+    <div class="card-label">Hoy toca</div>
+    <div class="today-row">
+      <span class="time-badge time-am">AM</span>
+      <span class="today-item" id="today-am">Cardio zona 2</span>
+    </div>
+    <div class="today-row">
+      <span class="time-badge time-pm">PM</span>
+      <span class="today-item" id="today-pm">Pesas</span>
+    </div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('hoy')">Hoy</button>
+  <button class="tab" onclick="switchTab('semana')">Semana</button>
+  <button class="tab" onclick="switchTab('metas')">Metas</button>
+  <button class="tab" onclick="switchTab('logros')">Logros</button>
+</div>
+
+<div id="pane-hoy" class="pane active">
+  <div class="metric-grid">
+    <div class="metric">
+      <div class="metric-label">Completado hoy</div>
+      <div class="metric-value green" id="done-count">0/4</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Racha activa</div>
+      <div class="metric-value" id="streak-display">0d</div>
+    </div>
+  </div>
+
+  <div class="week-dots" id="week-dots"></div>
+
+  <div class="sec-title">Mañana</div>
+  <div class="habit-block">
+    <div class="habit-row" id="row-h1">
+      <div><div class="habit-name">Breathwork / gratitud</div><div class="habit-streak" id="s-h1">racha: 0 días</div></div>
+      <button class="check-btn" id="btn-h1" onclick="toggle('h1')">✓</button>
+    </div>
+    <div class="habit-row" id="row-h2">
+      <div><div class="habit-name">Journaling</div><div class="habit-streak" id="s-h2">racha: 0 días</div></div>
+      <button class="check-btn" id="btn-h2" onclick="toggle('h2')">✓</button>
+    </div>
+    <div class="habit-row" id="row-h3">
+      <div><div class="habit-name">Cardio zona 2 AM</div><div class="habit-streak" id="s-h3">racha: 0 días</div></div>
+      <button class="check-btn" id="btn-h3" onclick="toggle('h3')">✓</button>
+    </div>
+  </div>
+
+  <div class="sec-title">Tarde</div>
+  <div class="habit-block">
+    <div class="habit-row" id="row-h4">
+      <div><div class="habit-name" id="lift-name">Pesas PM</div><div class="habit-streak" id="s-h4">racha: 0 días</div></div>
+      <button class="check-btn" id="btn-h4" onclick="toggle('h4')">✓</button>
+    </div>
+  </div>
+</div>
+
+<div id="pane-semana" class="pane">
+  <div class="sec-title" style="margin-top:0;">Plan semanal</div>
+  <div class="plan-block" id="week-plan"></div>
+  <div class="sec-title">Progresión cardio</div>
+  <div class="phase-block">
+    <div class="phase-row"><span class="phase-key">Sem 1–2</span><span class="phase-val">20–30 min · FC &lt;142</span></div>
+    <div class="phase-row"><span class="phase-key">Sem 3–4</span><span class="phase-val">35–40 min</span></div>
+    <div class="phase-row"><span class="phase-key">Sem 5–8</span><span class="phase-val">45–55 min</span></div>
+    <div class="phase-row"><span class="phase-key">Mes 3+</span><span class="phase-val">Long run Dom 1h+</span></div>
+    <div class="phase-row"><span class="phase-key">Hombro</span><span class="phase-val">Sin press libre</span></div>
+  </div>
+  <div class="rule-block">Si no puedes ir al gym ni al Run Club — mínimo 20 min caminata rápida. El día no se cancela, se adapta.</div>
+</div>
+
+<div id="pane-metas" class="pane">
+  <div class="sec-title" style="margin-top:0;">Próximos eventos</div>
+  <div class="event-card">
+    <div class="event-days-box" style="background:#d0eadb;">
+      <div class="event-days-num" style="color:#1a6b3f;" id="days-lisboa">—</div>
+      <div class="event-days-label" style="color:#1a6b3f;">días</div>
+    </div>
+    <div><div class="event-name">Maratón Lisboa</div><div class="event-date">10 oct 2025 · Meta: sub 3:20</div></div>
+  </div>
+  <div class="event-card">
+    <div class="event-days-box" style="background:#fef0e0;">
+      <div class="event-days-num" style="color:#a05c0a;" id="days-dallas">—</div>
+      <div class="event-days-label" style="color:#a05c0a;">días</div>
+    </div>
+    <div><div class="event-name">HYROX Dallas — Solo Pro</div><div class="event-date">21 nov 2025 · Estaciones mes 2+</div></div>
+  </div>
+  <div class="event-card">
+    <div class="event-days-box" style="background:#ebe6fc;">
+      <div class="event-days-num" style="color:#5c35b0; font-size:18px; line-height:1.8;">TBD</div>
+      <div class="event-days-label" style="color:#5c35b0;">fecha</div>
+    </div>
+    <div><div class="event-name">HYROX Acapulco — con Pato</div><div class="event-date">Por confirmar · comeback doubles</div></div>
+  </div>
+</div>
+
+<div id="pane-logros" class="pane">
+  <div class="sec-title" style="margin-top:0;">Esta semana</div>
+  <div class="week-dots" id="week-dots-2"></div>
+  <div class="sec-title">Recompensas por racha</div>
+  <div class="reward-block" id="reward-list"></div>
+</div>
+
+<script>
+const HABITS = ['h1','h2','h3','h4'];
+const DAYS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const QUOTES = [
+  {t:'"Confine yourself to the present."', a:'— Marcus Aurelius'},
+  {t:'"You have power over your mind, not outside events."', a:'— Marcus Aurelius'},
+  {t:'"Waste no more time arguing. Get to work."', a:'— Marcus Aurelius'},
+  {t:'"First say to yourself what you would be; then do what you have to do."', a:'— Epictetus'},
+  {t:'"It is not that we have a short time to live, but that we waste a lot of it."', a:'— Séneca'},
+  {t:'"He who has a why to live can bear almost any how."', a:'— Nietzsche'},
+  {t:'"What stands in the way becomes the way."', a:'— Marcus Aurelius'},
+];
+const WEEK_PLAN = [
+  {day:'Lun', badges:[{t:'b-run',l:'Cardio Z2 · 25 min'},{t:'b-lift',l:'Pecho'}], note:'Alarma 6:30am · FC <142 bpm'},
+  {day:'Mar', badges:[{t:'b-rc',l:'Run Club 5:30am'},{t:'b-lift',l:'Espalda'}], note:'Oráculo Run Club'},
+  {day:'Mié', badges:[{t:'b-cross',l:'Bici / cross · 25 min'},{t:'b-lift',l:'Pierna'}], note:'No correr — recuperación activa'},
+  {day:'Jue', badges:[{t:'b-rc',l:'Run Club 5:30am'},{t:'b-mob',l:'Movilidad · 20 min'},{t:'b-lift',l:'Hombro + Core'}], note:'Sin overhead libre · hombro'},
+  {day:'Vie', badges:[{t:'b-run',l:'Cardio Z2 · 30 min'},{t:'b-lift',l:'Bícep + Trícep'}], note:'Alarma 6:30am'},
+  {day:'Sáb', badges:[{t:'b-hyrox',l:'HYROX funcional'},{t:'b-lift',l:'Full body'}], note:'Estaciones HYROX gradualmente'},
+  {day:'Dom', badges:[{t:'b-hyrox',l:'Long run'}], note:'Pace conversacional · base aeróbica'},
+];
+const LIFT = {Lun:'Pecho',Mar:'Espalda',Mié:'Pierna',Jue:'Hombro + Core',Vie:'Bícep + Trícep',Sáb:'HYROX funcional',Dom:'Long run'};
+const REWARDS = [
+  {n:3, title:'Primer momentum', sub:'Compra ese libro pendiente'},
+  {n:7, title:'Semana sólida', sub:'Cena o experiencia que quieras'},
+  {n:14, title:'Hábito instalándose', sub:'Recovery premium en Oráculo'},
+  {n:21, title:'Identidad nueva', sub:'Lo que tú definas'},
+  {n:30, title:'Un mes sin excusas', sub:'Experiencia de alto valor'},
+];
+
+// --- STORAGE: keyed by date, persists forever ---
+const STORE_KEY = 'adsh_v2';
+let db = {};
+try { db = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { db = {}; }
+function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e) {} }
+function dateStr(d) { return d.toISOString().split('T')[0]; }
+function today() { return dateStr(new Date()); }
+function dayData(ds) { if (!db[ds]) db[ds] = {}; return db[ds]; }
+
+// streak for a single habit (consecutive days ending today)
+function habitStreak(id) {
+  let s = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if (dayData(dateStr(d))[id]) s++; else break;
+  }
+  return s;
+}
+// streak of days where >=2 habits done
+function dayStreak() {
+  let s = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const dd = db[dateStr(d)] || {};
+    if (HABITS.filter(id => dd[id]).length >= 2) s++; else break;
+  }
+  return s;
+}
+
+function toggle(id) {
+  const dd = dayData(today());
+  dd[id] = !dd[id];
+  persist();
+  renderAll();
+}
+
+function renderHeader() {
+  const hr = new Date().getHours();
+  document.getElementById('hdr-greeting').textContent = hr < 12 ? 'Buenos días,' : hr < 19 ? 'Buenas tardes,' : 'Buenas noches,';
+  const q = QUOTES[new Date().getDay() % QUOTES.length];
+  document.getElementById('quote-text').textContent = q.t;
+  document.getElementById('quote-author').textContent = q.a;
+  const dn = DAYS_ES[new Date().getDay()];
+  const lift = LIFT[dn] || 'Pesas PM';
+  const amTxt = ['Mar','Jue'].includes(dn) ? 'Run Club Oráculo · 5:30am' : dn === 'Sáb' ? 'HYROX funcional' : dn === 'Dom' ? 'Long run' : 'Cardio zona 2';
+  document.getElementById('today-am').textContent = amTxt;
+  document.getElementById('today-pm').textContent = lift;
+  const ln = document.getElementById('lift-name');
+  if (ln) ln.textContent = 'Pesas PM — ' + lift;
+}
+
+function renderHoy() {
+  const dd = dayData(today());
+  HABITS.forEach(id => {
+    const btn = document.getElementById('btn-' + id);
+    const row = document.getElementById('row-' + id);
+    const s = document.getElementById('s-' + id);
+    if (btn) btn.classList.toggle('checked', !!dd[id]);
+    if (row) row.classList.toggle('done', !!dd[id]);
+    if (s) s.textContent = 'racha: ' + habitStreak(id) + ' días';
+  });
+  const done = HABITS.filter(id => dd[id]).length;
+  document.getElementById('done-count').textContent = done + '/4';
+  document.getElementById('streak-display').textContent = dayStreak() + 'd';
+  renderDots('week-dots');
+}
+
+function renderDots(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  const now = new Date();
+  const dow = now.getDay();
+  const moOff = dow === 0 ? -6 : 1 - dow;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now); d.setDate(now.getDate() + moOff + i);
+    const ds = dateStr(d);
+    const done = HABITS.filter(id => (db[ds] || {})[id]).length >= 2;
+    const isToday = ds === today();
+    const div = document.createElement('div');
+    div.className = 'dot' + (done ? ' done' : '') + (isToday ? ' today' : '');
+    div.textContent = ['L','M','X','J','V','S','D'][i];
+    el.appendChild(div);
+  }
+}
+
+function renderPlan() {
+  const el = document.getElementById('week-plan');
+  if (!el) return;
+  const dn = DAYS_ES[new Date().getDay()];
+  el.innerHTML = WEEK_PLAN.map(r => {
+    const isHoy = r.day === dn;
+    const dc = 'plan-day' + (isHoy ? ' hoy' : '');
+    const badges = r.badges.map(b => `<span class="badge ${b.t}">${b.l}</span>`).join('');
+    return `<div class="plan-row"><span class="${dc}">${r.day}</span><div class="plan-content"><div class="badges">${badges}</div><div class="plan-note">${r.note}</div></div></div>`;
+  }).join('');
+}
+
+function renderGoals() {
+  const now = new Date();
+  function dl(iso) { return Math.max(0, Math.ceil((new Date(iso) - now) / 86400000)); }
+  document.getElementById('days-lisboa').textContent = dl('2025-10-10');
+  document.getElementById('days-dallas').textContent = dl('2025-11-21');
+}
+
+function renderLogros() {
+  renderDots('week-dots-2');
+  const s = dayStreak();
+  const el = document.getElementById('reward-list');
+  if (!el) return;
+  el.innerHTML = REWARDS.map(r =>
+    `<div class="reward-row${s >= r.n ? ' unlocked' : ''}">
+      <div class="reward-num">${r.n}</div>
+      <div><div class="reward-title">${r.title}</div><div class="reward-sub">${r.sub}</div></div>
+    </div>`
+  ).join('');
+}
+
+function renderAll() { renderHeader(); renderHoy(); renderPlan(); renderGoals(); }
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['hoy','semana','metas','logros'][i] === name));
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  if (name === 'logros') renderLogros();
+}
+
+renderAll();
+</script>
+</body>
+</html>
